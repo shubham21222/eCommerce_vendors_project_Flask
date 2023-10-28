@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+</head>
+<body>
+    <canvas id="myChart" width="400" height="400"></canvas>
+    <button id="randomizeData">Randomize Data</button>
+<button id="addDataset">Add Dataset</button>
+<button id="removeDataset">Remove Dataset</button>
+<button id="addData">Add Data</button>
+<button id="removeData">Remove Data</button>
+<button id="changeCircleSize">Semi/Full Circle</button>
+</body>
+<script>
+
+    d3.csv("/file/Bar_cases.csv")
+        .then(makeChart);
+    function makeChart(data) {
+      var country = data.map(function(d) {return d.province;});
+      var value = data.map(function(d) {return d.cumulative_cases;});
+    }
+    function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+          }
+        var pro_unique = province.filter( onlyUnique );
+        var ab_val = []
+        var BC_val = []
+        var mb_val = []
+        var nb_val = []
+        var nl_val = []
+        date.forEach((i_dt, index) => {
+          if (i_dt == '2020-05-31' && province[index] =="Alberta") {
+          ab_val.push(value[index]);
+        } else if (i_dt == '2020-05-31' && province[index] =="BC") {
+          BC_val.push(value[index]);
+        } else if (i_dt == '2020-05-31' && province[index] =="Manitoba") {
+          mb_val.push(value[index]);
+        } else if (i_dt == '2020-05-31' && province[index] =="New Brunswick") {
+          nb_val.push(value[index]);
+        }
+         else if (i_dt == '2020-05-31' && province[index] =="NL") {
+         nl_val.push(value[index]);
+        }
+        });
+</script>
+
+
+
+
+<script>
+    window.chartColors = {
+        red: 'rgb(255, 99, 132)',
+        orange: 'rgb(255, 159, 64)',
+        yellow: 'rgb(255, 205, 86)',
+        green: 'rgb(75, 192, 192)',
+        blue: 'rgb(54, 162, 235)',
+        purple: 'rgb(153, 102, 255)',
+        grey: 'rgb(201, 203, 207)'
+    };
+
+    var ab_val = [100, 200, 150, 50, 80]; // Replace with actual data
+    var BC_val = [80, 120, 110, 30, 60];  // Replace with actual data
+    var mb_val = [/* add your data here */];
+    var nb_val = [/* add your data here */];
+    var nl_val = [/* add your data here */];
+    var pro_unique = ["Alberta", "BC", "Manitoba", "New Brunswick", "NL"]; // Replace with actual data
+
+    var config = {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [ab_val, BC_val, mb_val, nb_val, nl_val],
+                backgroundColor: [
+                    window.chartColors.red,
+                    window.chartColors.orange,
+                    window.chartColors.yellow,
+                    window.chartColors.green,
+                    window.chartColors.blue
+                ],
+                label: 'Dataset 1'
+            }],
+            labels: pro_unique
+        },
+        options: {
+            responsive: true,
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Total counts of confirmed cases in Canada'
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        }
+    };
+
+    window.onload = function () {
+        var ctx = document.getElementById('myChart').getContext('2d');
+        window.myDoughnut = new Chart(ctx, config);
+    };
+
+    // Define the randomScalingFactor function or use your own data generator
+
+    document.getElementById('randomizeData').addEventListener('click', function () {
+        config.data.datasets[0].data = [
+            randomScalingFactor(),
+            randomScalingFactor(),
+            randomScalingFactor(),
+            randomScalingFactor(),
+            randomScalingFactor()
+        ];
+        window.myDoughnut.update();
+    });
+
+    document.getElementById('addDataset').addEventListener('click', function () {
+        var newColor = window.chartColors[Object.keys(window.chartColors)[config.data.datasets.length % Object.keys(window.chartColors).length]];
+        var newDataset = {
+            backgroundColor: newColor,
+            data: randomScalingFactor(),
+            label: 'New dataset ' + (config.data.datasets.length + 1)
+        };
+        config.data.datasets.push(newDataset);
+        window.myDoughnut.update();
+    });
+
+    document.getElementById('addData').addEventListener('click', function () {
+        if (config.data.labels.length > 0) {
+            config.data.labels.push('Data #' + (config.data.labels.length + 1));
+            config.data.datasets[0].data.push(randomScalingFactor());
+            window.myDoughnut.update();
+        }
+    });
+
+    document.getElementById('removeDataset').addEventListener('click', function () {
+        config.data.datasets.pop();
+        window.myDoughnut.update();
+    });
+
+    document.getElementById('removeData').addEventListener('click', function () {
+        config.data.labels.pop();
+        config.data.datasets[0].data.pop();
+        window.myDoughnut.update();
+    });
+
+    document.getElementById('changeCircleSize').addEventListener('click', function () {
+        if (window.myDoughnut.options.circumference === Math.PI) {
+            window.myDoughnut.options.circumference = 2 * Math.PI;
+            window.myDoughnut.options.rotation = -Math.PI / 2;
+        } else {
+            window.myDoughnut.options.circumference = Math.PI;
+            window.myDoughnut.options.rotation = -Math.PI;
+        }
+        window.myDoughnut.update();
+    });
+
+    // Define the randomScalingFactor function if not already defined
+    function randomScalingFactor() {
+        return Math.round(Math.random() * 100);
+    }
+</script>
+
+</html>

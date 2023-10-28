@@ -1,0 +1,143 @@
+{% include 'includes/header.html' %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product</title>
+    <style>
+        p {
+            font-size: 16px;
+        }
+
+        body {
+            padding: 0;
+        }
+
+        form {
+            background-color: #ffffff;
+            padding: 20px;
+
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .main12 {
+            padding-top: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main12">
+        <h1 style="margin-left: 750px;">Edit Product</h1>
+        <br>
+        <br>
+        <div>
+
+            <form method="POST" action="{{ url_for('auth.edit_product') }}" onsubmit="return validateForm();">
+
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+
+                <input type="hidden" name="product_id" value="{{ product_id }}">
+
+                <label for="product_name">New Product Name:</label>
+                <input type="text" name="product_name" value="{{ product.product_name }}" required maxlength="15">
+
+                <label for="new_price">New Price:</label>
+                <input type="number" name="new_price" value="{{ product.price }}" max="100000" required >
+
+                <label for="new_listing">New Listing:</label>
+                <input type="number" name="new_listing" id="new_listing_input" value="{{ product.listing }}" required max="100000">
+                
+
+
+                <label for="new_stock">New Stock:</label>
+                <input type="number" name="new_stock" value="{{ product.stock }}" max="10000" required >
+
+                <button type="submit">Save Changes</button>
+            </form>
+
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <script>
+    function validateForm() {
+        var productName = document.getElementsByName("product_name")[0].value;
+        var newPrice = document.getElementsByName("new_price")[0].value;
+        var newListingStr = document.getElementsByName("new_listing")[0].value;
+        var newListing = parseFloat(newListingStr);
+        var newStock = document.getElementsByName("new_stock")[0].value;
+    
+        if (productName.length > 15) {
+            alert("Product name cannot exceed 15 characters.");
+            return false;
+        }
+        if (newPrice > 100000) {
+            alert("Price cannot be more than 100000.");
+            return false;
+        }
+        if (newListing > 100000) {
+            alert("Listing cannot exceed 100000.");
+            return false;
+        }
+        if (newStock > 10000) {
+            alert("Stock cannot be more than 10000.");
+            return false;
+        }
+        return true;
+    }
+    
+    // Add an event listener to handle input changes
+    document.getElementById("new_listing_input").addEventListener("input", function () {
+        var newListing = parseFloat(this.value);
+        if (newListing > 100000) {
+            alert("Listing cannot exceed 100000.");
+            this.value = "100000"; // Reset the input value to the maximum allowed
+        }
+    });
+</script>
+</body>
+
+</html>
+
+{% include 'includes/footer.html' %}

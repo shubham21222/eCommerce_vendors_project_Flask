@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rimberio Seller</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    {% include 'includes/header.html' %}
+    
+    <!-- Header Section -->
+    <header class="mainHeading">
+        <div class="mainHeading__content">
+            <article class="mainHeading__text">
+                <p class="mainHeading__preTitle">Welcome</p>
+                <h2 class="mainHeading__title">Become a Rimberio seller</h2>
+                <p class="mainHeading__description">
+                    "Discover the latest trends in fashion at Rimberio - your ultimate destination for stylish online clothing shopping."
+                </p>
+                <button class="cta">know more</button>
+            </article>
+
+            <figure class="mainHeading__image">
+                <img class="img-fluid" src="{{ url_for('static', filename='images/a1.png') }}" alt="" />
+            </figure>
+        </div>
+    </header>
+
+     <br>
+     <br>
+     <br>
+     <br>
+     <br>
+     <br>
+    
+    <!-- About Us Section -->
+    <section class="container" id="about-section">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>About Us</h1>
+                <p  style="text-align: justify;  font-size: 20px; line-height: 50px;">
+                    "At Rimberio, we're more than just an online clothing store; we're your fashion partner on a journey to express your unique style. Established with a passion for contemporary fashion, we curate a diverse range of clothing that speaks to your individuality. Our commitment to quality and affordability ensures that you can confidently embrace the latest trends without breaking the bank. With a customer-centric approach, we prioritize your satisfaction, offering a seamless shopping experience. At Rimberio, we believe that fashion is an expression of self, and we're here to help you make a statement. Explore our collections and join us in redefining your style story."
+                </p>
+            </div>
+        </div>
+    </section>
+    
+
+    <figure class="image-container mx-auto text-center">
+        <img src="{{ url_for('static', filename='images/Screenshot from 2023-10-04 13-40-26.png') }}" alt="" class="img-fluid" style="text-shadow: rgba(0,0,255,0.9) 0px 0px 39px;
+        ">
+    </figure>
+    
+<br>
+<br>
+    
+    <!-- Contact Form Section -->
+    <section class="container" id="contact">
+        <div class="row">
+            <!-- Left Section for Form -->
+            <div class="col-md-6">
+                <h1>We are happy to help you 🙂</h1>
+                <br>
+                <form action="{{ url_for('auth.home') }}" method="POST">
+                    <div class="form-group">
+                        <label for="fname">Full name:</label>
+                        <input type="text" id="fname" name="fname" class="form-control" placeholder="Full name" required maxlength="20">
+                    </div>
+                    <br>
+                    
+                    <div class="form-group">
+                        <label for="lname">Mobile Number:</label>
+                        <input type="text" id="lname" name="lname" class="form-control" placeholder="Mobile Number" required maxlength="12">
+                    </div>
+                    <br>
+                    
+                    <div class="form-group">
+                        <label for="product_detail">Question Description:</label>
+                        <textarea id="product_detail" name="product_detail" class="form-control" placeholder="Write a short description of your question" required maxlength="100"></textarea>
+                    </div>
+                    <br>
+                    
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+            <!-- Right Section for Text -->
+            <div class="col-md-6" style="padding-top: 150px; line-height: 2;">
+                <p>
+                    Still have questions or queries that are left unanswered? Share your thoughts below, which will help us improve your website experience.
+                </p>
+            </div>
+        </div>
+    </section>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    {% include 'includes/footer.html' %}
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

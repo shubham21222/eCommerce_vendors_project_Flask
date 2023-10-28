@@ -1,0 +1,120 @@
+{% include 'includes/header.html' %}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+
+    h1 {
+        background-color: #007BFF;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        margin: 0;
+    }
+
+    h2 {
+        background-color: #3498db;
+        color: white;
+        padding: 10px;
+    }
+
+    p {
+        margin: 10px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: white;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #007BFF;
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    form {
+        display: flex;
+        align-items: center;
+    }
+
+    input[type="number"] {
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-right: 10px;
+    }
+
+    button[type="submit"] {
+        background-color: #3498db;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #2980b9;
+    }
+
+    /* Add more CSS styling as needed */
+
+    /* Styling for the footer */
+
+</style>
+<body>
+    <h1>Welcome to Your Dashboard</h1>
+
+    <h2>User Information</h2>
+    <p>Email: {{ user_info.email }}</p>
+    <p>Item Name: {{ user_info.item_name }}</p>
+    <!-- Add more user information fields as needed -->
+
+    <h2>Product Details</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Listed Price</th>
+                <th>Available Stock</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.product_name }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.stock }}</td>
+                <td>
+                    <form method="POST" action="/update_stock">
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <input type="number" name="stock_change" placeholder="Stock Change">
+                        <button type="submit">Update Stock</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Add more content or styling as needed -->
+</body>
+</html>
+{% include 'includes/footer.html' %}

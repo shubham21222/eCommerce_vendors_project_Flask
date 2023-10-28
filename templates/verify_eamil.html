@@ -1,0 +1,104 @@
+{% include 'includes/header.html' %}
+    <style>
+
+
+      
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 50px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            /* Added for emphasis */
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+
+        .flash-messages {
+            list-style: none;
+            padding: 0;
+        }
+
+        .flash-messages li {
+            display: inline-block;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .main{
+            padding-top: 150px;
+        }
+
+        label:after {
+    content: " *";
+    color: red;
+  }
+
+    </style>
+</head>
+
+<body>
+    <div class="main">
+    <h2 style="margin-left: 830px;">Email Verification</h2>
+    <br>
+    <ul class="flash-messages">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <li class="flash-{{ message[1] }}">{{ message }}</li>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </ul>
+
+    <form method="POST" action="{{ url_for('auth.verify_email') }}">
+        <input type="hidden" name="email" value="{{ email }}"> <!-- Hidden input for email -->
+        <label for="verification_code">Verification Code:</label>
+        <input type="text" id="verification_code" name="verification_code" required><br>
+        <button type="submit">Verify</button>
+    </form>
+    
+    <div id="verification-message" style="display: none;">
+        <p>Email verification successful. You can now log in.</p>
+    </div>
+</div>
+<br>
+<br>
+<script>
+    function showVerificationMessage() {
+        document.getElementById('verification-message').style.display = 'block';
+    }
+</script>
+</body>
+{% include 'includes/footer.html' %}

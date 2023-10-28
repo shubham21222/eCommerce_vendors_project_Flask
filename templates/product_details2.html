@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        .navbar {
+            background-color: transparent;
+            color: white;
+            /* Set the text color to white or another suitable color */
+        }
+
+        .navbar-nav .nav-link {
+            color: white;
+            /* Set the text color for the links */
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+    <!-- Navbar using Bootstrap -->
+    <nav class="navbar navbar-expand-lg">
+        <a href="/" class="mainNav__logo">RIMBERIO</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto"> <!-- 'mx-auto' centers the links -->
+                <li class="nav-item">
+                    <a href="/" class="mainNav__link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="mainNav__link" href="#about-section">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="mainNav__link" href="#contact">Contacts</a>
+                </li>
+            </ul>
+        </div>
+        <button class="btn btn-primary" onclick="redirectToHome1()">Logout</button>
+    </nav>
+
+
+
+
+    <div class="container mt-4">
+        <br>
+        <br>
+        <h2 class="text-center">Vendor Information</h2>
+        <br>
+        <br>
+
+        <div class="row mt-3">
+            <div class="col-md-6 search-container">
+                <div class="input-group" style="margin-bottom: 30px;">
+                    <input type="text" id="myInput" oninput="searchTable()" class="form-control"
+                        placeholder="Search for names.." title="Type in a name">
+                    <div class="input-group-append">
+                        <span class="input-group-text">
+                            <i class="fa fa-search"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group float-right" class="sort-container" style="margin-bottom: 30px;">
+                    <label for="priceSort">Sort Price:</label>
+                    <select id="priceSort" class="form-control">
+                        <option value="default">Default</option>
+                        <option value="lowToHigh">Low to High</option>
+                        <option value="highToLow">High to Low</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <form method="POST" action="{{ url_for('auth.delete_products') }}" id="delete-products-form">
+            <div id="table-container">
+
+                <div class="row mt-3">
+                    <table class="table table-bordered table-striped" id="myTable">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th class="narrow-column">Checkbox</th>
+                                <th>Product Name</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Username</th>
+                                <th>Listing</th>
+                                <th>Action</th>
+                                <th>Status</th>
+                                <th>Delivery</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in user_products %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="selected_products" value="{{ product.product_id }}">
+                                </td>
+                                <td>{{ product.product_name }}</td>
+                                <td>{{ product.price | float | round(2) }}</td>
+                                <td>{{ product.stock | float | round(2) }}</td>
+                                <td>{{ product.username }}</td>
+                                <td>{{ product.listing | float | round(2) }}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-primary edit-button"
+                                            data-product-id="{{ product.product_id }}" data-product-name="{{ product.product_name }}"
+                                            data-product-price="{{ product.price }}" data-product-stock="{{ product.stock }}">Edit</button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge badge-danger" id="status_{{ product.product_id }}"
+                                        data-product-id="{{ product.product_id }}" data-product-status="{{ product.status }}">
+                                        {{ product.status }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="javascript:void(0);" data-product-id="{{ product.product_id }}" class="change-status-link">Change Status</a>
+                                </td>
+                                
+    
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <button type="button" id="toggleAddProductForm" class="btn btn-primary">Add Product</button>
+                    </div>
+                    <div class="col-md-6">
+                        <form method="POST" action="{{ url_for('auth.delete_products') }}">
+                            <button type="submit" class="btn btn-danger float-right">Delete Selected Products</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+        <div class="row mt-3">
+            <form method="POST" action="{{ url_for('auth.update_product') }}" id="updateForm" style="display: none;">
+                <input type="hidden" name="item_name" value="{{ onboarding_registration.item_name }}">
+                <div class="form-group">
+                    <label for="new_stock">New Stock:</label>
+                    <input type="number" name="new_stock" id="new_stock" class="form-control" placeholder="New Stock"
+                        max="10000">
+                </div>
+                <div class="form-group">
+                    <label for="new_listing">New Listing:</label>
+                    <input type="text" name="new_listing" id="new_listing" class="form-control"
+                        placeholder="New Listing" maxlength="7">
+                </div>
+                <div class="form-group">
+                    <label for="discount">Discount (%):</label>
+                    <input type="number" name="discount" id="discount" class="form-control" placeholder="Discount"
+                        max="100">
+                </div>
+                <button id="toggleUpdateForm" class="btn btn-primary">Update Stock and Listing</button>
+            </form>
+        </div>
+
+        <div class="row mt-3">
+            <form method="POST" action="{{ url_for('auth.add_product') }}" id="addProductForm" style="display: none;">
+                <div class="form-group">
+                    <label for="product_name">Product Name:</label>
+                    <input type="text" name="product_name" id="product_name" class="form-control"
+                        placeholder="Product Name" required maxlength="10">
+                </div>
+                <div class="form-group">
+                    <label for="product_price">Product Price:</label>
+                    <input type="number" name="product_price" id="product_price" class="form-control"
+                        placeholder="Product Price" required max="100000">
+                </div>
+                <div class="form-group">
+                    <label for="product_listing">Product Listing:</label>
+                    <input type="number" name="product_listing" id="product_listing" class="form-control"
+                        placeholder="Product Listing" required maxlength="10000">
+                </div>
+                <div class="form-group">
+                    <label for="product_stock">Product Stock:</label>
+                    <input type="number" name="product_stock" id="product_stock" class="form-control"
+                        placeholder="Product Stock" required maxlength="10000">
+                </div>
+                <button type="submit" class="btn btn-primary">Add Product</button>
+            </form>
+        </div>
+
+        <div class="row mt-3">
+            <p id="discounted_price"></p>
+        </div>
+
+        <div class="row mt-4" style="text-align: center; justify-content: center;">
+            <p class="text-center"><a href="{{ url_for('auth.home') }}" class="btn btn-primary">Back to Home</a></p>
+        </div>
+        <br>
+        <br>
+        <br>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
+
+
+<script>
+    // Function to toggle the visibility of a form by its ID
+    function toggleFormVisibility(formId) {
+        var form = document.getElementById(formId);
+        if (form.style.display === "none") {
+            form.style.display = "block";
+        } else {
+            form.style.display = "none";
+        }
+    }
+
+    // Function to calculate and display the discounted price
+    function calculateDiscountedPrice() {
+        var newListing = parseFloat(document.getElementById("new_listing").value);
+        var discount = parseFloat(document.getElementById("discount").value);
+
+        if (!isNaN(newListing) && !isNaN(discount)) {
+            var discountedPrice = newListing - (newListing * (discount / 100));
+            document.getElementById("discounted_price").textContent = "Discounted Price: " + discountedPrice.toFixed(2);
+        } else {
+            document.getElementById("discounted_price").textContent = "";
+        }
+    }
+
+    // Add click event listeners for toggling forms
+    document.getElementById("toggleUpdateForm").addEventListener("click", function () {
+        toggleFormVisibility("updateForm");
+    });
+
+    document.getElementById("toggleAddProductForm").addEventListener("click", function () {
+        toggleFormVisibility("addProductForm");
+    });
+
+    // Add a click event listener to handle the "Edit" button click
+    function handleEditButtonClick(event) {
+        var productId = event.target.getAttribute("data-product-id");
+        window.location.href = "{{ url_for('auth.edit_product', product_id='') }}" + productId;
+    }
+
+    // Add click event listeners to all "Edit" buttons
+    var editButtons = document.querySelectorAll(".edit-button");
+    editButtons.forEach(function (button) {
+        button.addEventListener("click", handleEditButtonClick);
+    });
+
+    // Add an event listener to the add product form for validation
+    document.getElementById("addProductForm").addEventListener("submit", function (e) {
+        var productListingInput = document.getElementById('product_listing');
+        var productStockInput = document.getElementById('product_stock');
+
+        // Check if the product listing exceeds the limit
+        if (parseInt(productListingInput.value) > 100000) {
+            alert('Product Listing cannot exceed 100000.');
+            e.preventDefault(); // Prevent form submission
+        }
+
+        // Check if the product stock exceeds the limit
+        if (parseInt(productStockInput.value) > 10000) {
+            alert('Product Stock cannot exceed 10000.');
+            e.preventDefault(); // Prevent form submission
+        }
+    });
+</script>
+<script>
+    // Define the base URL for the edit product link as a JavaScript variable
+    var editProductUrl = "{{ url_for('auth.edit_product', product_id='') }}";
+
+    // Add a click event listener to handle the "Edit" button click
+    function handleEditButtonClick(event) {
+        var productId = event.target.getAttribute("data-product-id");
+        // Construct the edit product URL with the product ID and navigate to it
+        window.location.href = editProductUrl + productId;
+        event.preventDefault(); // Prevent the default form submission
+    }
+
+    // Add click event listeners to all "Edit" buttons within the form
+    document.querySelectorAll("form .edit-button").forEach(function (button) {
+        button.addEventListener("click", handleEditButtonClick);
+    });
+    document.getElementById("delete-products-form").addEventListener("submit", function (event) {
+        if (!confirm("Are you sure you want to delete the selected products?")) {
+            event.preventDefault(); // Prevent form submission if the user cancels the action
+        }
+    });
+</script>
+
+<script>
+    function redirectToHome1() {
+        console.log("Redirecting to Home1");
+        window.location.href = "{{ url_for('auth.home') }}";
+    }
+</script>
+
+
+
+<script>
+    // Add this JavaScript code in a separate file (table-resize.js)
+    const table = document.getElementById('table_resize');
+    let clicked = false;
+    let startX, startWidth;
+
+    table.style.tableLayout = 'fixed';
+
+    table.querySelectorAll('th').forEach(headerCell => {
+        headerCell.style.position = 'relative';
+
+        const resizer = document.createElement('div');
+        resizer.style.width = '8px';
+        resizer.style.height = '100%';
+        resizer.style.position = 'absolute';
+        resizer.style.top = 0;
+        resizer.style.right = 0;
+        resizer.style.cursor = 'col-resize';
+        headerCell.appendChild(resizer);
+
+        resizer.addEventListener('mousedown', function (e) {
+            clicked = true;
+            startX = e.pageX;
+            startWidth = headerCell.clientWidth;
+        });
+
+        document.addEventListener('mousemove', function (e) {
+            if (!clicked) return;
+            const width = startWidth + (e.pageX - startX);
+            headerCell.style.width = `${width}px`;
+        });
+
+        document.addEventListener('mouseup', function () {
+            clicked = false;
+        });
+    });
+
+</script>
+
+<script>
+    document.getElementById("myInput").addEventListener("input", searchTable);
+
+    function searchTable() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1]; // Change this index to the column where you want to search.
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    document.getElementById("priceSort").addEventListener("change", function () {
+        var selectedValue = this.value;
+
+        if (selectedValue === "lowToHigh") {
+            sortTable(2, 'asc'); // Sort by price column in ascending order
+        } else if (selectedValue === "highToLow") {
+            sortTable(2, 'desc'); // Sort by price column in descending order
+        } else {
+            // Handle the "Default" option (no sorting) or other options if needed
+            // For "Default," you can reload the page or reset the table to its original order.
+            // For other options, you can add more conditions.
+        }
+    });
+
+    function sortTable(column, order) {
+        var table, rows, switching, i, x, y, shouldSwitch;
+        table = document.getElementById("myTable");
+        switching = true;
+
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("td")[column];
+                y = rows[i + 1].getElementsByTagName("td")[column];
+
+                if (order === 'asc') {
+                    if (parseFloat(x.textContent) > parseFloat(y.textContent)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (order === 'desc') {
+                    if (parseFloat(x.textContent) < parseFloat(y.textContent)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
+    }
+
+
+</script>
+<script>
+function changeStatus(productId) {
+    var statusElement = document.getElementById('status_' + productId);
+    var currentStatus = statusElement.getAttribute('data-product-status');
+
+    // Toggle between "Completed" and "In Process"
+    var newStatus = currentStatus === 'Completed' ? 'In Process' : 'Completed';
+
+    statusElement.setAttribute('data-product-status', newStatus);
+    statusElement.textContent = newStatus;
+
+    // Update the badge color
+    if (newStatus === 'Completed') {
+        statusElement.classList.remove('badge-danger');
+        statusElement.classList.add('badge-success');
+    } else {
+        statusElement.classList.remove('badge-success');
+        statusElement.classList.add('badge-danger');
+    }
+}
+
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const changeStatusLinks = document.querySelectorAll('.change-status-link');
+    
+    changeStatusLinks.forEach(function(link) {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            const productId = link.getAttribute('data-product-id');
+            changeStatus(productId);
+        });
+    });
+});
+
+</script>
+
+</body>
+
+</html>
+
+{% include 'includes/footer.html' %}

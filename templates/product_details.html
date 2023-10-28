@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Dashboard</title>
+    <script src="https://unpkg.com/table-resize@0.0.2/table-resize.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        p {
+            font-size: 16px;
+        }
+
+        form {
+            background-color: #AECDEF;
+            
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid hwb(0 92% 5%);
+            border-radius: 5px;
+        }
+
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        #discounted_price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #007bff;
+            margin-top: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #606C5D;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #f2f2f2;
+        }
+
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        .main12 {
+            padding-top: 150px;
+        }
+
+
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            /* Pushes items to the sides of the container */
+            margin-top: 50px;
+        }
+
+        /* Add margin to separate the buttons from other content */
+        .button-container button {
+            margin-right: 10px;
+            /* Adjust as needed */
+        }
+
+        .button-container input[type="submit"] {
+            margin-left: 10px;
+            /* Adjust as needed */
+        }
+
+        #myInput {
+            background-position: 10px 10px;
+            background-repeat: no-repeat;
+            width: 100%;
+            font-size: 16px;
+            padding: 12px 20px 12px 40px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+        }
+
+        /* CSS for the search and sort containers */
+        .search-container {
+            width: 30%;
+            float: left;
+            margin-left: 20px;
+        }
+
+        .sort-container {
+    width: 60%; /* Adjust the width as needed */
+    float: right;
+    text-align: right;
+    padding: 10px; /* Add padding for spacing */
+    border: 1px solid #ccc; /* Add a border for styling */
+    border-radius: 5px; /* Add rounded corners */
+    margin-top: 10px;
+}
+
+.sort-container label {
+    font-weight: bold;
+}
+
+.sort-container select {
+    width: 20%; /* Make the select element take up the full width */
+    padding: 5px; /* Add padding for better appearance */
+}
+
+        /* Adjust the input and select styles if needed */
+        .search-container input[type="text"] {
+            width: 100%;
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+    <div class="about">
+        <a class="bg_links social portfolio" href="https://www.rafaelalucas.com" target="_blank">
+            <span class="icon"></span>
+        </a>
+        <a class="bg_links social dribbble" href="https://dribbble.com/rafaelalucas" target="_blank">
+            <span class="icon"></span>
+        </a>
+        <a class="bg_links social linkedin" href="https://www.linkedin.com/in/rafaelalucas/" target="_blank">
+            <span class="icon"></span>
+        </a>
+        <a class="bg_links logo"></a>
+    </div>
+    <!-- end about -->
+
+    <nav class="mainNav">
+        <div class="mainNav__logo">Rimberio</div>
+        <div class="mainNav__links">
+            <a href="/" class="mainNav__link">Home</a>
+            <a href="#about-section" class="mainNav__link">About</a>
+
+
+            <a href="#contact" class="mainNav__link">Contacts</a>
+        </div>
+        <div class="mainNav__buttons">
+            <button class="cta" onclick="redirectToHome1()">Logout</button>
+
+        </div>
+        <div class="mainNav__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <g data-name="Layer 2" fill="#9197AE">
+                    <g data-name="menu-2">
+                        <rect width="24" height="24" transform="rotate(180 12 12)" opacity="0" />
+                        <circle cx="4" cy="12" r="1" />
+                        <rect x="7" y="11" width="14" height="2" rx=".94" ry=".94" />
+                        <rect x="3" y="16" width="18" height="2" rx=".94" ry=".94" />
+                        <rect x="3" y="6" width="18" height="2" rx=".94" ry=".94" />
+                    </g>
+                </g>
+            </svg>
+        </div>
+    </nav>
+
+
+
+
+
+
+    <div class="main12">
+        <h2 style="text-align: center;">Vendor Information</h2>
+        <br>
+        <br>
+        <div class="search-container">
+            <input type="text" id="myInput" oninput="searchTable()" placeholder="Search for names.."
+                title="Type in a name">
+        </div>
+        <div class="sort-container">
+            <label for="priceSort">Sort Price:</label>
+            <select id="priceSort">
+                <option value="default">Default</option>
+                <option value="lowToHigh">Low to High</option>
+                <option value="highToLow">High to Low</option>
+            </select>
+        </div>
+
+        <br>
+        <br>
+        <br>
+
+
+        <form method="POST" action="{{ url_for('auth.delete_products') }}" id="delete-products-form">
+            <div id="table-container">
+
+
+                <table cellpadding="0" cellspacing="0" id="myTable" contenteditable="true" class="resize">
+                    <tr>
+                        <th class="narrow-column">Checkbox</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Username</th>
+                        <th>Listing</th>
+                        <th>Action</th> <!-- Changed the header to "Action" -->
+                    </tr>
+                    {% for product in user_products %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="selected_products" value="{{ product.product_id }}">
+                        </td>
+                        <td>{{ product.product_name }}</td>
+                        <td>{{ product.price | float | round(2) }}</td>
+                        <td>{{ product.stock | float | round(2) }}</td>
+                        <td>{{ product.username }}</td>
+                        <td>{{ product.listing | float | round(2) }}</td>
+                        <td>
+
+                            <div id="edit-button-container">
+                                <button class="edit-button" data-product-id="{{ product.product_id }}">Edit</button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+            <div class="button-container">
+
+                <button type="button" id="toggleAddProductForm" style="padding: 15px 20px;" class="cta">Add
+                    Product</button>
+                <input type="submit" value="Delete Selected Products" style="padding: 15px 20px;"
+                    id="delete-products-form" class="cta">
+            </div>
+
+        </form>
+
+
+        <div id="edit-button-container"></div>
+        <br>
+        <br>
+        <br>
+
+        <!--<button id="toggleUpdateForm" style="padding: 15px 20px;">Update Stock and Listing</button>-->
+
+
+
+        <form method="POST" action="{{ url_for('auth.update_product') }}" id="updateForm" style="display: none;">
+            <input type="hidden" name="item_name" value="{{ onboarding_registration.item_name }}">
+            <label for="new_stock">New Stock:</label>
+            <input type="number" name="new_stock" id="new_stock" placeholder="New Stock" max="10000">
+            <label for="new_listing">New Listing:</label>
+            <input type="text" name="new_listing" id="new_listing" placeholder="New Listing" maxlength="7">
+            <label for="discount">Discount (%):</label>
+            <input type="number" name="discount" id="discount" placeholder="Discount" max="100">
+            <br>
+            <br>
+            <button id="toggleUpdateForm" style="padding: 15px 30px; font-size: 18px;">Update Stock and Listing</button>
+        </form>
+
+        <form method="POST" action="{{ url_for('auth.add_product') }}" id="addProductForm" style="display: none;">
+            <label for="product_name">Product Name:</label>
+            <input type="text" name="product_name" id="product_name" placeholder="Product Name" required maxlength="10">
+            <label for="product_price">Product Price:</label>
+            <input type="number" name="product_price" id="product_price" placeholder="Product Price" required
+                max="100000">
+            <label for="product_listing">Product Listing:</label>
+            <input type="number" name="product_listing" id="product_listing" placeholder="Product Listing" required
+                maxlength="10000">
+            <label for="product_stock">Product Stock:</label>
+            <input type="number" name="product_stock" id="product_stock" placeholder="Product Stock" required
+                maxlength="10000">
+            <button type="submit" style="padding: 15px 30px; font-size: 18px;" class="cta">Add Product</button>
+        </form>
+
+        <p id="discounted_price"></p>
+
+
+        <br>
+        <br>
+        <p style="text-align: center;"><a href="{{ url_for('auth.home') }}" class="cta">Back to Home</a></p>
+        <br>
+        <br>
+        <br>
+        <br>
+    </div>
+
+    <script>
+        // Function to toggle the visibility of a form by its ID
+        function toggleFormVisibility(formId) {
+            var form = document.getElementById(formId);
+            if (form.style.display === "none") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        }
+
+        // Function to calculate and display the discounted price
+        function calculateDiscountedPrice() {
+            var newListing = parseFloat(document.getElementById("new_listing").value);
+            var discount = parseFloat(document.getElementById("discount").value);
+
+            if (!isNaN(newListing) && !isNaN(discount)) {
+                var discountedPrice = newListing - (newListing * (discount / 100));
+                document.getElementById("discounted_price").textContent = "Discounted Price: " + discountedPrice.toFixed(2);
+            } else {
+                document.getElementById("discounted_price").textContent = "";
+            }
+        }
+
+        // Add click event listeners for toggling forms
+        document.getElementById("toggleUpdateForm").addEventListener("click", function () {
+            toggleFormVisibility("updateForm");
+        });
+
+        document.getElementById("toggleAddProductForm").addEventListener("click", function () {
+            toggleFormVisibility("addProductForm");
+        });
+
+        // Add a click event listener to handle the "Edit" button click
+        function handleEditButtonClick(event) {
+            var productId = event.target.getAttribute("data-product-id");
+            window.location.href = "{{ url_for('auth.edit_product', product_id='') }}" + productId;
+        }
+
+        // Add click event listeners to all "Edit" buttons
+        var editButtons = document.querySelectorAll(".edit-button");
+        editButtons.forEach(function (button) {
+            button.addEventListener("click", handleEditButtonClick);
+        });
+
+        // Add an event listener to the add product form for validation
+        document.getElementById("addProductForm").addEventListener("submit", function (e) {
+            var productListingInput = document.getElementById('product_listing');
+            var productStockInput = document.getElementById('product_stock');
+
+            // Check if the product listing exceeds the limit
+            if (parseInt(productListingInput.value) > 100000) {
+                alert('Product Listing cannot exceed 100000.');
+                e.preventDefault(); // Prevent form submission
+            }
+
+            // Check if the product stock exceeds the limit
+            if (parseInt(productStockInput.value) > 10000) {
+                alert('Product Stock cannot exceed 10000.');
+                e.preventDefault(); // Prevent form submission
+            }
+        });
+    </script>
+    <script>
+        // Define the base URL for the edit product link as a JavaScript variable
+        var editProductUrl = "{{ url_for('auth.edit_product', product_id='') }}";
+
+        // Add a click event listener to handle the "Edit" button click
+        function handleEditButtonClick(event) {
+            var productId = event.target.getAttribute("data-product-id");
+            // Construct the edit product URL with the product ID and navigate to it
+            window.location.href = editProductUrl + productId;
+            event.preventDefault(); // Prevent the default form submission
+        }
+
+        // Add click event listeners to all "Edit" buttons within the form
+        document.querySelectorAll("form .edit-button").forEach(function (button) {
+            button.addEventListener("click", handleEditButtonClick);
+        });
+        document.getElementById("delete-products-form").addEventListener("submit", function (event) {
+            if (!confirm("Are you sure you want to delete the selected products?")) {
+                event.preventDefault(); // Prevent form submission if the user cancels the action
+            }
+        });
+    </script>
+
+    <script>
+        function redirectToHome1() {
+            console.log("Redirecting to Home1");
+            window.location.href = "{{ url_for('auth.home') }}";
+        }
+    </script>
+
+
+
+    <script>
+        // Add this JavaScript code in a separate file (table-resize.js)
+        const table = document.getElementById('table_resize');
+        let clicked = false;
+        let startX, startWidth;
+
+        table.style.tableLayout = 'fixed';
+
+        table.querySelectorAll('th').forEach(headerCell => {
+            headerCell.style.position = 'relative';
+
+            const resizer = document.createElement('div');
+            resizer.style.width = '8px';
+            resizer.style.height = '100%';
+            resizer.style.position = 'absolute';
+            resizer.style.top = 0;
+            resizer.style.right = 0;
+            resizer.style.cursor = 'col-resize';
+            headerCell.appendChild(resizer);
+
+            resizer.addEventListener('mousedown', function (e) {
+                clicked = true;
+                startX = e.pageX;
+                startWidth = headerCell.clientWidth;
+            });
+
+            document.addEventListener('mousemove', function (e) {
+                if (!clicked) return;
+                const width = startWidth + (e.pageX - startX);
+                headerCell.style.width = `${width}px`;
+            });
+
+            document.addEventListener('mouseup', function () {
+                clicked = false;
+            });
+        });
+
+    </script>
+
+    <script>
+        document.getElementById("myInput").addEventListener("input", searchTable);
+
+        function searchTable() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1]; // Change this index to the column where you want to search.
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script>
+        document.getElementById("priceSort").addEventListener("change", function () {
+            var selectedValue = this.value;
+
+            if (selectedValue === "lowToHigh") {
+                sortTable(2, 'asc'); // Sort by price column in ascending order
+            } else if (selectedValue === "highToLow") {
+                sortTable(2, 'desc'); // Sort by price column in descending order
+            } else {
+                // Handle the "Default" option (no sorting) or other options if needed
+                // For "Default," you can reload the page or reset the table to its original order.
+                // For other options, you can add more conditions.
+            }
+        });
+
+        function sortTable(column, order) {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("myTable");
+            switching = true;
+
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("td")[column];
+                    y = rows[i + 1].getElementsByTagName("td")[column];
+
+                    if (order === 'asc') {
+                        if (parseFloat(x.textContent) > parseFloat(y.textContent)) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (order === 'desc') {
+                        if (parseFloat(x.textContent) < parseFloat(y.textContent)) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+
+
+    </script>
+
+</body>
+
+</html>
+
+{% include 'includes/footer.html' %}

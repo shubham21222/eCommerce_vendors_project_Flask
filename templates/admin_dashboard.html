@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Add necessary HTML head content -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* Styles for the tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f5f5f5;
+}
+
+tr:hover {
+    background-color: #e0e0e0;
+}
+
+/* Styles for pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    margin: 0 5px;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.pagination button:hover {
+    background-color: #0056b3;
+}
+
+.pagination span {
+    font-weight: bold;
+    margin: 0 10px;
+    font-size: 18px;
+}
+
+    </style>
+</head>
+<body>
+    <h2>Admin Dashboard</h2>
+
+    <!-- Display Vendor Data -->
+    <h3>Vendors</h3>
+    <table id="vendorTable">
+        <thead>
+            <tr>
+                <th>Vendor Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vendor in vendors %}
+            <tr>
+                <td>{{ vendor.first_name }}</td>
+                <td>{{ vendor.username }}</td>
+                <td>{{ vendor.email }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('auth.admin_dashboard') }}">
+                        <input type="hidden" name="delete_vendor" value="{{ vendor.email }}">
+                        <button type="submit">Delete</button>
+                    </form>
+                    
+                    <form method="POST" action="{{ url_for('auth.admin_dashboard') }}">
+                        <input type="hidden" name="delete_product" value="{{ products.product_id }}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="pagination" id="vendorPagination">
+        <!-- Pagination controls for vendors -->
+        <button id="prevVendorPage">Previous</button>
+        <span id="vendorCurrentPage">1</span>
+        <button id="nextVendorPage">Next</button>
+    </div>
+
+    <!-- Display Product Data -->
+    <h3>Products</h3>
+    <table id="productTable">
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.product_name }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.stock }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('auth.admin_dashboard', product_id=product.product_id) }}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="pagination" id="productPagination">
+        <!-- Pagination controls for products -->
+        <button id="prevProductPage">Previous</button>
+        <span id="productCurrentPage">1</span>
+        <button id="nextProductPage">Next</button>
+    </div>
+
+    <p>Total Stock: {{ total_stock }}</p>
+    <p>Total Price: {{ total_price }}</p>
+    <canvas id="myChart" width="400" height="200"></canvas>
+
+
+    {% block script %}
+    <script>
+        const rowsPerPage = 10; // Adjust the number of rows per page as needed
+        let vendorCurrentPage = 1;
+        let productCurrentPage = 1;
+    
+        function showVendorPage(page) {
+            const vendorRows = Array.from(document.querySelectorAll('#vendorTable tbody tr'));
+            vendorRows.forEach((row, index) => {
+                if (index >= (page - 1) * rowsPerPage && index < page * rowsPerPage) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    
+        function showProductPage(page) {
+            const productRows = Array.from(document.querySelectorAll('#productTable tbody tr'));
+            productRows.forEach((row, index) => {
+                if (index >= (page - 1) * rowsPerPage && index < page * rowsPerPage) {
+                    row.style.display = 'table-row'; // Fixed the syntax error here
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    
+        function updateVendorPagination() {
+            const vendorCurrentPageSpan = document.getElementById('vendorCurrentPage');
+            vendorCurrentPageSpan.textContent = vendorCurrentPage;
+        }
+    
+        function updateProductPagination() {
+            const productCurrentPageSpan = document.getElementById('productCurrentPage');
+            productCurrentPageSpan.textContent = productCurrentPage;
+        }
+    
+        document.getElementById('nextVendorPage').addEventListener('click', () => {
+            const totalVendorRows = document.querySelectorAll('#vendorTable tbody tr').length;
+            if (vendorCurrentPage < Math.ceil(totalVendorRows / rowsPerPage)) {
+                vendorCurrentPage++;
+                showVendorPage(vendorCurrentPage);
+                updateVendorPagination();
+            }
+        });
+    
+        document.getElementById('prevVendorPage').addEventListener('click', () => {
+            if (vendorCurrentPage > 1) {
+                vendorCurrentPage--;
+                showVendorPage(vendorCurrentPage);
+                updateVendorPagination();
+            }
+        });
+    
+        document.getElementById('nextProductPage').addEventListener('click', () => {
+            const totalProductRows = document.querySelectorAll('#productTable tbody tr').length;
+            if (productCurrentPage < Math.ceil(totalProductRows / rowsPerPage)) {
+                productCurrentPage++;
+                showProductPage(productCurrentPage);
+                updateProductPagination();
+            }
+        });
+    
+        document.getElementById('prevProductPage').addEventListener('click', () => {
+            if (productCurrentPage > 1) {
+                productCurrentPage--;
+                showProductPage(productCurrentPage);
+                updateProductPagination();
+            }
+        });
+    
+        // Initially show the first page for both tables
+        showVendorPage(vendorCurrentPage);
+        showProductPage(productCurrentPage);
+        updateVendorPagination();
+        updateProductPagination();
+    
+        var ctx = document.getElementById('myChart').getContext('2d');
+    
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Total Stock', 'Total Price'],
+                datasets: [{
+                    label: 'Amount',
+                    data: [totalStock, totalPrice],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(255, 99, 132, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+    
+    {% endblock %}
+    
+    
+</body>
+</html>

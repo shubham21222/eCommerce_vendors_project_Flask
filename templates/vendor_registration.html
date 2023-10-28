@@ -1,0 +1,107 @@
+
+{% include 'includes/header.html' %}
+<style>
+    .center-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .login-container { 
+        background-color: rgba(0, 0, 0, 0);
+        
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        text-align: center;
+    }
+
+    .login-container img {
+        display: block;
+        margin: 0 auto 20px;
+        max-width: 100%;
+        height: auto;
+    }
+
+    .login-container h2 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        font-size: 0.875rem;
+        margin-bottom: 5px;
+        text-align: left;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+
+
+    .register-link {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .register-link a {
+        color: #3490dc;
+        text-decoration: none;
+    }
+
+    .register-link a:hover {
+        text-decoration: underline;
+    }
+
+    label:after {
+    content: " *";
+    color: red;
+  }
+</style>
+
+
+<div class="center-container"> <!-- This container centers the form -->
+    <div class="login-container">
+        <h2>Sign in to your account</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="alert alert-danger">
+      {% for category, message in messages %}
+        <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+        <form method="POST" action="{{ url_for('auth.submit') }}" class="login-form">
+            <div class="form-group">
+                <label for="name">Username or Email: </label>
+                <input id="name" name="shubh" type="text" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password </label>
+                <input id="password" name="password" type="password" required>
+            </div>
+            <button type="submit" class="cta">Sign in</button>
+        </form>
+        <div class="register-link">
+            <p>Not a member? <a href="{{ url_for('auth.register_form') }}">Register</a></p>
+        </div>
+    </div>
+</div>
+
+
+{% include 'includes/footer.html' %}
