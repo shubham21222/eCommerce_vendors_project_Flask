@@ -138,6 +138,11 @@ body {
   font-family: "Raleway", sans-serif;
   
   background-color: #aecdef;
+
+}
+
+*{
+  color: #2E2E2E;
 }
 
 .mainNav {
@@ -182,7 +187,7 @@ body {
 }
 .mainNav__link:hover {
   transform: translateY(-5px);
-  box-shadow: inset 0px -20px 0px white;   /**/
+     /**/
 }
 .mainNav__icon {
   background-image: url(https://rafaelalucas91.github.io/assets/icons/black/icon-141.svg);
@@ -204,7 +209,7 @@ body {
   height: 100%;
   position: relative;
   padding: 0 40px;
-  background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
+  
 }
 @media screen and (max-width: 799px) {
   .mainHeading {
