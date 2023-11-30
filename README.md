@@ -44,7 +44,6 @@ The project directory comprises the following key components:
 - `models.py`: Defines the database models using SQLAlchemy.
 - `forms.py`: Manages web forms using WTForms for user input validation.
 - `views.py`: Contains views for handling CRUD operations and rendering templates.
-- `utils.py`: Utility functions for various tasks, including email verification.
 - `templates/`: Directory containing HTML templates.
 - `static/`: Directory for static assets such as CSS and images.
 
