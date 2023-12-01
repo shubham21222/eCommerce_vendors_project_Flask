@@ -84,9 +84,7 @@ Before proceeding, ensure that the following dependencies are installed on your 
 1. Before running the application, initialize the database by executing the following commands:
 
 ```bash
-flask db init
-flask db migrate
-flask db upgrade
+python3 db.py
 ```
 
 
