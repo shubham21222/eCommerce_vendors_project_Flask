@@ -81,15 +81,9 @@ Before proceeding, ensure that the following dependencies are installed on your 
 
 ## Database Initialization and Configuration
 
-1. Before running the application, initialize the database by executing the following commands:
-
-```bash
-python3 db.py
-```
 
 
-
-2. Update the MySQL database configuration in the `db.py` file. Open `db.py` and provide your MySQL database connection details as follows:
+1. Update the MySQL database configuration in the `db.py` file,`auth.py` file,`config.py` file. Open `db.py` and provide your MySQL database connection details as follows:
 
    ```python
    db_config = {
@@ -99,7 +93,11 @@ python3 db.py
        "database": "your_database_name"
    }
    ```
+2. Before running the application, initialize the database by executing the following commands:
 
+```bash
+python3 db.py
+```
    Save the changes.
 
 ## Running the Application
