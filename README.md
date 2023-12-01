@@ -63,13 +63,13 @@ Before proceeding, ensure that the following dependencies are installed on your 
 1. Clone the GitHub repository to your desired location:
 
    ```bash
-      git clone https://github.com/yourusername/ecommerce-vendors-platform.git
+      git clone https://github.com/shubham21222/eCommerce_vendors_project_Flask
    ```
 
 2. Navigate to the "CMS" directory:
 
    ```bash
-   cd ecommerce-vendors-platform
+   cd eCommerce_vendors_project_Flask
 
    ```
 
